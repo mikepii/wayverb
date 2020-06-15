@@ -88,7 +88,7 @@ private:
     }
 };
 
-class directory_component final : public Component, public ButtonListener {
+class directory_component final : public Component, public Button::Listener {
 public:
     using model_t = wayverb::combined::model::output;
 

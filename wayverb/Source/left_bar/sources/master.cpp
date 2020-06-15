@@ -53,7 +53,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 
 master::master(wayverb::core::geo::box aabb,
-               wayverb::combined::model::sources& model)
+               wayverb::combined::model::sources_t& model)
         : list_box_{model,
                     [aabb](auto shared) {
                         return make_list_config_item_ptr(

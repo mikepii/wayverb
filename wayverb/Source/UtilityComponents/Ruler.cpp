@@ -1,7 +1,7 @@
 #include "Ruler.h"
 
 #include "juce_range_utils.h"
-
+#include <cassert>
 #include <iomanip>
 #include <sstream>
 

@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="IqmNqo" name="wayverb" projectType="guiapp" version="0.0.1"
               bundleIdentifier="com.reubenthomas.wayverb" includeBinaryInAppConfig="1"
-              jucerVersion="4.3.0">
+              jucerVersion="5.4.7">
   <MAINGROUP id="aLrqtw" name="wayverb">
     <GROUP id="{7B584E1B-2D8F-4FAF-2BC9-A18BF95B12BA}" name="Source">
       <GROUP id="{1AA0A1DE-8B1B-9F90-FACD-F8DAB10973BD}" name="3d_objects">
@@ -182,11 +182,11 @@
                smallIcon="eBKJgN" bigIcon="eBKJgN">
       <CONFIGURATIONS>
         <CONFIGURATION name="Debug" isDebug="1" optimisation="1" targetName="wayverb"
-                       osxSDK="default" osxCompatibility="10.9 SDK" osxArchitecture="64BitIntel"
-                       cppLanguageStandard="gnu++14" cppLibType=""/>
+                       osxCompatibility="10.9 SDK" osxArchitecture="64BitIntel" cppLanguageStandard="gnu++14"
+                       cppLibType=""/>
         <CONFIGURATION name="Release" isDebug="0" optimisation="3" targetName="wayverb"
                        osxCompatibility="10.9 SDK" osxArchitecture="64BitIntel" cppLanguageStandard="gnu++14"
-                       cppLibType="" linkTimeOptimisation="0" osxSDK="default"/>
+                       cppLibType="" linkTimeOptimisation="0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_core" path="../../JUCE/modules"/>
@@ -204,6 +204,30 @@
         <MODULEPATH id="juce_audio_processors" path="../../JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
+    <LINUX_MAKE targetFolder="Builds/LinuxMakefile" extraCompilerFlags="-I../../../src/audio_file/include&#10;-I../../../src/combined/include&#10;-I../../../src/core/include&#10;-I../../../src/frequency_domain/include&#10;-I../../../src/hrtf/lib/include&#10;-I../../../src/raytracer/include&#10;-I../../../src/utilities/include&#10;-I../../../src/waveguide/include&#10;-I../../../build/include&#10;-I../../../build/dependencies/include&#10;-I../../Source/UtilityComponents&#10;-I../../Source&#10;-I/usr/include/freetype2&#10;-pthread -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/libdrm -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+                extraLinkerFlags="-L../../../build/lib&#10;-L../../../build/dependencies/lib"
+                externalLibraries="assimp&#10;audio_file&#10;combined&#10;compensation_signal&#10;core&#10;fftw3&#10;fftw3f&#10;frequency_domain&#10;itpp_static&#10;modern_gl_utils&#10;raytracer&#10;samplerate&#10;sndfile&#10;utilities&#10;waveguide&#10;zlibstatic"
+                smallIcon="eBKJgN" bigIcon="eBKJgN" linuxExtraPkgConfig="OpenCL freetype2 gtk+-3.0">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug" optimisation="1" linuxArchitecture="-m64"/>
+        <CONFIGURATION isDebug="0" name="Release" optimisation="3" linuxArchitecture="-m64"/>
+      </CONFIGURATIONS>
+      <MODULEPATHS>
+        <MODULEPATH id="juce_video" path="../../juce"/>
+        <MODULEPATH id="juce_opengl" path="../../juce"/>
+        <MODULEPATH id="juce_gui_extra" path="../../juce"/>
+        <MODULEPATH id="juce_gui_basics" path="../../juce"/>
+        <MODULEPATH id="juce_graphics" path="../../juce"/>
+        <MODULEPATH id="juce_events" path="../../juce"/>
+        <MODULEPATH id="juce_data_structures" path="../../juce"/>
+        <MODULEPATH id="juce_cryptography" path="../../juce"/>
+        <MODULEPATH id="juce_core" path="../../juce"/>
+        <MODULEPATH id="juce_audio_processors" path="../../juce"/>
+        <MODULEPATH id="juce_audio_formats" path="../../juce"/>
+        <MODULEPATH id="juce_audio_devices" path="../../juce"/>
+        <MODULEPATH id="juce_audio_basics" path="../../juce"/>
+      </MODULEPATHS>
+    </LINUX_MAKE>
   </EXPORTFORMATS>
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="1"/>
@@ -221,4 +245,7 @@
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="1"/>
   </MODULES>
   <JUCEOPTIONS/>
+  <LIVE_SETTINGS>
+    <LINUX buildEnabled="1"/>
+  </LIVE_SETTINGS>
 </JUCERPROJECT>

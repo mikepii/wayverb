@@ -1,4 +1,5 @@
 #include "StoredSettings.h"
+#include <memory>
 
 TargetOS::OS TargetOS::get_this_os() noexcept {
 #if JUCE_WINDOWS
@@ -42,7 +43,7 @@ juce::PropertiesFile& StoredSettings::get_project_properties(
     auto fname = app_name + "_" + uid;
     for (auto i = property_files.size(); --i >= 0;) {
         auto props = property_files.getUnchecked(i);
-        if (props->getFile().getFileNameWithoutExtension() == fname)
+        if (props->getFile().getFileNameWithoutExtension() == juce::String(fname))
             return *props;
     }
 
@@ -68,8 +69,8 @@ void StoredSettings::reload() {
     property_files.clear();
     property_files.add(create_props_file(app_name));
 
-    juce::ScopedPointer<juce::XmlElement> projectDefaultsXml(
-            property_files.getFirst()->getXmlValue("PROJECT_DEFAULT_SETTINGS"));
+    std::unique_ptr<juce::XmlElement> projectDefaultsXml =
+            property_files.getFirst()->getXmlValue("PROJECT_DEFAULT_SETTINGS");
 
     if (projectDefaultsXml != nullptr)
         project_defaults = juce::ValueTree::fromXml(*projectDefaultsXml);
@@ -99,8 +100,8 @@ void StoredSettings::set_last_projects(const juce::Array<juce::File>& files) {
 }
 
 void StoredSettings::changed() {
-    juce::ScopedPointer<juce::XmlElement> data(project_defaults.createXml());
-    property_files.getUnchecked(0)->setValue("PROJECT_DEFAULT_SETTINGS", data);
+    std::unique_ptr<juce::XmlElement> data = project_defaults.createXml();
+    property_files.getUnchecked(0)->setValue("PROJECT_DEFAULT_SETTINGS", data.get());
 }
 
 void StoredSettings::valueTreePropertyChanged(juce::ValueTree&,

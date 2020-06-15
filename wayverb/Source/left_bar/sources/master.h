@@ -19,12 +19,12 @@ namespace sources {
 class master final : public Component {
 public:
     master(wayverb::core::geo::box aabb,
-           wayverb::combined::model::sources& sources);
+           wayverb::combined::model::sources_t& sources);
 
     void resized() override;
 
 private:
-    editable_vector_list_box<wayverb::combined::model::sources> list_box_;
+    editable_vector_list_box<wayverb::combined::model::sources_t> list_box_;
 };
 
 }  // namespace sources

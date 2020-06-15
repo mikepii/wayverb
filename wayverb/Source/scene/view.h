@@ -62,8 +62,8 @@ public:
 
     //  Sources/receivers.
 
-    void set_sources(wayverb::combined::model::sources sources);
-    void set_receivers(wayverb::combined::model::receivers receivers);
+    void set_sources(wayverb::combined::model::sources_t sources);
+    void set_receivers(wayverb::combined::model::receivers_t receivers);
 
     //  Drawing functionality.
 

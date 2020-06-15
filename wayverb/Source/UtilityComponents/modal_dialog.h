@@ -4,7 +4,7 @@
 #include "connector.h"
 
 template <typename T>
-class ok_cancel_window final : public Component, public ButtonListener {
+class ok_cancel_window final : public Component, public Button::Listener {
 public:
     ok_cancel_window(std::unique_ptr<T> content)
             : content_{std::move(content)} {
@@ -63,7 +63,7 @@ auto make_ok_cancel_window_ptr(std::unique_ptr<T> ptr) {
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
-class done_window final : public Component, public ButtonListener {
+class done_window final : public Component, public Button::Listener {
 public:
     done_window(std::unique_ptr<T> content)
             : content_{std::move(content)} {

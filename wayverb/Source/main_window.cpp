@@ -228,7 +228,7 @@ void main_window::save_as() {
 
 std::experimental::optional<std::string>
 main_window::browse_for_file_to_save() {
-    FileChooser fc{"save location...", File(), project::project_wildcard};
+    FileChooser fc{"save location...", File(), Project::project_wildcard};
     if (fc.browseForFileToSave(true)) {
         const auto path = fc.getResult();
         path.createDirectory();

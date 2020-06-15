@@ -11,14 +11,14 @@
 
 /// All the stuff that goes into a save-file/project.
 /// Projects consist of a (copy of a) 3d model, along with a json save file.
-class project final {
+class Project final {
     const wayverb::core::scene_data_loader scene_data_;
     bool needs_save_;
 
 public:
     wayverb::combined::model::persistent persistent;
 
-    explicit project(const std::string& fpath);
+    explicit Project(const std::string& fpath);
 
     static constexpr const char* model_name = "model.model";
     static constexpr const char* config_name = "config.json";
@@ -122,7 +122,7 @@ public:
     wayverb::combined::model::output output;
 
     //  Project data.
-    project project;
+    Project project;
 
     //  Preset data.
 

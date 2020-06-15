@@ -18,12 +18,12 @@ class master final : public Component {
 public:
     master(const main_model::capsule_presets_t& presets,
            wayverb::core::geo::box aabb,
-           wayverb::combined::model::receivers& receivers);
+           wayverb::combined::model::receivers_t& receivers);
 
     void resized() override;
 
 private:
-    editable_vector_list_box<wayverb::combined::model::receivers> list_box_;
+    editable_vector_list_box<wayverb::combined::model::receivers_t> list_box_;
 };
 
 }  // namespace receivers

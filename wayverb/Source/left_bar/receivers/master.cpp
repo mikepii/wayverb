@@ -128,7 +128,7 @@ private:
 
 master::master(const main_model::capsule_presets_t& presets,
                wayverb::core::geo::box aabb,
-               wayverb::combined::model::receivers& receivers)
+               wayverb::combined::model::receivers_t& receivers)
         : list_box_{receivers,
                     [&presets, aabb](auto shared) {
                         return make_list_config_item_ptr(

@@ -84,7 +84,7 @@ public:
 
     //  Sources/receivers.
 
-    void set_sources(wayverb::combined::model::sources sources) {
+    void set_sources(wayverb::combined::model::sources_t sources) {
         sources_ = util::map_to_vector(
                 std::begin(sources),
                 std::end(sources),
@@ -98,7 +98,7 @@ public:
                 });
     }
 
-    void set_receivers(wayverb::combined::model::receivers receivers) {
+    void set_receivers(wayverb::combined::model::receivers_t receivers) {
         receivers_ = util::map_to_vector(
                 std::begin(receivers),
                 std::end(receivers),
@@ -270,10 +270,10 @@ void view::set_emphasis_colour(const glm::vec3& colour) {
     pimpl_->set_emphasis_colour(colour);
 }
 
-void view::set_sources(wayverb::combined::model::sources sources) {
+void view::set_sources(wayverb::combined::model::sources_t sources) {
     pimpl_->set_sources(std::move(sources));
 }
-void view::set_receivers(wayverb::combined::model::receivers receivers) {
+void view::set_receivers(wayverb::combined::model::receivers_t receivers) {
     pimpl_->set_receivers(std::move(receivers));
 }
 

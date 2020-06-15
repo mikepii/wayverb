@@ -68,8 +68,8 @@ private:
     template <typename T>
     auto do_action_with_closest_thing(
             const glm::vec2& mouse_pos,
-            wayverb::combined::model::sources& sources,
-            wayverb::combined::model::receivers& receivers,
+            wayverb::combined::model::sources_t& sources,
+            wayverb::combined::model::receivers_t& receivers,
             T&& action) const {
         const auto get_hovered_in_range = [this, mouse_pos](auto& range) {
             return get_hovered(std::begin(range), std::end(range), mouse_pos);

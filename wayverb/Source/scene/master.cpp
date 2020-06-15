@@ -204,8 +204,8 @@ private:
             scoped_connection projection_matrix_changed_connection_;
     wayverb::combined::model::scene::visualise_changed::scoped_connection
             visualise_changed_connection_;
-    wayverb::combined::model::sources::scoped_connection sources_connection_;
-    wayverb::combined::model::receivers::scoped_connection
+    wayverb::combined::model::sources_t::scoped_connection sources_connection_;
+    wayverb::combined::model::receivers_t::scoped_connection
             receivers_connection_;
 
     main_model::waveguide_node_positions_changed::scoped_connection positions_changed_;

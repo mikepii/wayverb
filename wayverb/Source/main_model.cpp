@@ -13,7 +13,7 @@
 
 #include <fstream>
 
-project::project(const std::string& fpath)
+Project::Project(const std::string& fpath)
         : scene_data_{is_project_file(fpath) ? compute_model_path(fpath)
                                              : fpath}
         , needs_save_{!is_project_file(fpath)} {
@@ -33,7 +33,7 @@ project::project(const std::string& fpath)
     //  If there's a config file, we'll just overwrite the state we just set,
     //  but that's probably fine.
     if (is_project_file(fpath)) {
-        const auto config_file = project::compute_config_path(fpath);
+        const auto config_file = compute_config_path(fpath);
 
         //  load the config
         std::ifstream stream{config_file};
@@ -44,15 +44,15 @@ project::project(const std::string& fpath)
     persistent.connect([&](auto&) { needs_save_ = true; });
 }
 
-std::string project::compute_model_path(const std::string& root) {
+std::string Project::compute_model_path(const std::string& root) {
     return root + '/' + model_name;
 }
 
-std::string project::compute_config_path(const std::string& root) {
+std::string Project::compute_config_path(const std::string& root) {
     return root + '/' + config_name;
 }
 
-bool project::is_project_file(const std::string& fpath) {
+bool Project::is_project_file(const std::string& fpath) {
     return std::string{std::find_if(crbegin(fpath),
                                     crend(fpath),
                                     [](auto i) { return i == '.'; })
@@ -60,29 +60,29 @@ bool project::is_project_file(const std::string& fpath) {
                        end(fpath)} == project_extension;
 }
 
-std::string project::get_extensions() const {
+std::string Project::get_extensions() const {
     return scene_data_.get_extensions() + ';' + project_extension;
 }
 
-void project::save_to(const std::string& fpath) {
+void Project::save_to(const std::string& fpath) {
     if (needs_save_) {
         //  TODO create directory
 
         //  write current geometry to file
-        scene_data_.save(project::compute_model_path(fpath));
+        scene_data_.save(compute_model_path(fpath));
 
         //  write config with all current materials to file
-        std::ofstream stream{project::compute_config_path(fpath)};
+        std::ofstream stream{compute_config_path(fpath)};
         cereal::JSONOutputArchive{stream}(persistent);
 
         needs_save_ = false;
     }
 }
 
-bool project::needs_save() const { return needs_save_; }
+bool Project::needs_save() const { return needs_save_; }
 
 wayverb::core::generic_scene_data<cl_float3, std::string>
-project::get_scene_data() const {
+Project::get_scene_data() const {
     return *scene_data_.get_scene_data();
 }
 
@@ -138,11 +138,11 @@ public:
 
     ~impl() noexcept { cancel_render(); }
 
-    void start_render(const class project& project,
+    void start_render(const class Project& p,
                       const wayverb::combined::model::output& output) {
         engine_.run(wayverb::core::compute_context{},
-                    generate_scene_data(project),
-                    project.persistent,
+                    generate_scene_data(p),
+                    p.persistent,
                     output);
     }
 
@@ -185,17 +185,17 @@ public:
 
 private:
     wayverb::core::gpu_scene_data generate_scene_data(
-            const class project& project) const {
+            const class Project& p) const {
         util::aligned::unordered_map<
                 std::string,
                 wayverb::core::surface<wayverb::core::simulation_bands>>
                 material_map;
 
-        for (const auto& i : *project.persistent.materials()) {
+        for (const auto& i : *p.persistent.materials()) {
             material_map[i->get_name()] = i->get_surface();
         }
 
-        return scene_with_extracted_surfaces(project.get_scene_data(),
+        return scene_with_extracted_surfaces(p.get_scene_data(),
                                              material_map);
     }
 
@@ -246,7 +246,7 @@ void main_model::cancel_render() { pimpl_->cancel_render(); }
 bool main_model::is_rendering() const { return pimpl_->is_rendering(); }
 
 void main_model::save(const save_callback& callback) {
-    if (project::is_project_file(currently_open_file_)) {
+    if (Project::is_project_file(currently_open_file_)) {
         project.save_to(currently_open_file_);
     } else {
         if (const auto fpath = callback()) {
@@ -256,7 +256,7 @@ void main_model::save(const save_callback& callback) {
 }
 
 void main_model::save_as(std::string name) {
-    if (!project::is_project_file(name)) {
+    if (!Project::is_project_file(name)) {
         throw std::runtime_error{
                 "Save path must have correct project extension."};
     }
