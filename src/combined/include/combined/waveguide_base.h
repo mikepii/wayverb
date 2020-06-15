@@ -3,7 +3,7 @@
 #include "waveguide/bandpass_band.h"
 
 #include "glm/fwd.hpp"
-
+#include <atomic>
 #include <experimental/optional>
 #include <functional>
 

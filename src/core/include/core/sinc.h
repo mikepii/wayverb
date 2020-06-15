@@ -3,6 +3,7 @@
 #include "core/dsp_vector_ops.h"
 
 #include "utilities/aligned/vector.h"
+#include <algorithm>
 
 namespace wayverb {
 namespace core {

@@ -101,7 +101,7 @@ public:
                       receiver,
                       waveguide->compute_sampling_frequency(),
                       environment.speed_of_sound)}
-            , room_volume_{estimate_volume(voxels_and_mesh_.mesh)}
+            , room_volume_{estimate_volume(voxels_and_mesh_.m)}
             , source_{source}
             , receiver_{receiver}
             , environment_{environment}

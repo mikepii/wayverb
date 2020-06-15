@@ -37,13 +37,13 @@ void mesh::set_coefficients(
     vectors_.set_coefficients(std::move(coefficients));
 }
 
-double estimate_volume(const mesh& mesh) {
-    const auto& nodes = mesh.get_structure().get_condensed_nodes();
+double estimate_volume(const mesh& m) {
+    const auto& nodes = m.get_structure().get_condensed_nodes();
     const auto num_inside =
             std::count_if(cbegin(nodes), cend(nodes), [](const auto& i) {
                 return is_inside(i);
             });
-    const auto spacing = mesh.get_descriptor().spacing;
+    const auto spacing = m.get_descriptor().spacing;
     const auto node_volume = spacing * spacing * spacing;
     return node_volume * num_inside;
 }
@@ -154,8 +154,8 @@ voxels_and_mesh compute_voxels_and_mesh(const core::compute_context& cc,
                     core::geo::compute_aabb(scene.get_vertices()),
                     anchor,
                     mesh_spacing));
-    auto mesh = compute_mesh(cc, voxelised, mesh_spacing, speed_of_sound);
-    return {std::move(voxelised), std::move(mesh)};
+    auto m = compute_mesh(cc, voxelised, mesh_spacing, speed_of_sound);
+    return {std::move(voxelised), std::move(m)};
 }
 
 }  // namespace waveguide

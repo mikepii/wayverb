@@ -90,10 +90,10 @@ int main(int /*argc*/, char** /*argv*/) {
         auto voxels_and_mesh = wayverb::waveguide::compute_voxels_and_mesh(
                 cc, scene_data, receiver, sampling_frequency, speed_of_sound);
 
-        voxels_and_mesh.mesh.set_coefficients(
+        voxels_and_mesh.m.set_coefficients(
                 wayverb::waveguide::to_flat_coefficients(absorption));
 
-        const auto& model = voxels_and_mesh.mesh;
+        const auto& model = voxels_and_mesh.m;
 
         const auto nodes = model.get_descriptor().dimensions.s[0] *
                            model.get_descriptor().dimensions.s[1] *

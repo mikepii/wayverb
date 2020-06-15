@@ -50,7 +50,7 @@ bool operator!=(const source& a, const source& b);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-using sources = min_size_vector<source, 1>;
+using sources_t = min_size_vector<source, 1>;
 
 }  // namespace model
 }  // namespace combined

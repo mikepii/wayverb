@@ -11,7 +11,7 @@ public:
     dir(const char* name)
             : ptr_{opendir(name)} {
         if (!ptr_) {
-            throw std::runtime_error{"Unable to open directory."};
+            throw std::runtime_error{"Unable to open directory. dir=" + std::string{name}};
         }
     }
 
@@ -35,7 +35,11 @@ inline auto list_directory(const char* name) {
     std::vector<std::string> ret{};
 
     while (const auto ptr = directory.read()) {
+#ifdef _DIRENT_HAVE_D_NAMLEN 
         ret.emplace_back(ptr->d_name, ptr->d_name + ptr->d_namlen);
+#else
+        ret.emplace_back(std::string(ptr->d_name));
+#endif
     }
 
     return ret;

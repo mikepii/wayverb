@@ -1,6 +1,7 @@
 #include "frequency_domain/buffer.h"
 
 #include "traits.h"
+#include <cstring>
 
 namespace frequency_domain {
 

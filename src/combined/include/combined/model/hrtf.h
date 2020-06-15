@@ -11,6 +11,7 @@ namespace model {
 
 class hrtf final : public basic_member<hrtf> {
 public:
+    using base_type = basic_member<hrtf>;
     hrtf() = default;
     hrtf(const core::orientation& o, core::attenuator::hrtf::channel channel);
 

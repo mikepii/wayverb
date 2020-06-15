@@ -1,5 +1,6 @@
 #include "core/azimuth_elevation.h"
 
+#include <algorithm>
 #include <cmath>
 
 namespace wayverb {

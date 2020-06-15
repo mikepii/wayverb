@@ -5,16 +5,16 @@
 using namespace wayverb::combined;
 using namespace wayverb::core;
 
-TEST(app_model, sources) {
+TEST(app_model, sources_t) {
     const auto quick_check = [](const auto& i) {
         ASSERT_EQ(i.connections(), 0);
         ASSERT_EQ(i[0].item()->connections(), 1);
     };
 
-    model::sources a{};
+    model::sources_t a{};
     quick_check(a);
 
-    model::sources b{};
+    model::sources_t b{};
     quick_check(b);
 
     a = b;
@@ -25,7 +25,7 @@ TEST(app_model, sources) {
     quick_check(a);
     quick_check(b);
 
-    model::sources sources{};
+    model::sources_t sources{};
     ASSERT_EQ(sources.connections(), 0);
     ASSERT_EQ(sources[0].item()->connections(), 1);
 

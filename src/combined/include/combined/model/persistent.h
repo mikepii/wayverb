@@ -15,14 +15,12 @@ namespace model {
 /// other than presets, which will be stored separately.
 
 class persistent final : public owning_member<persistent,
-                                              sources,
-                                              receivers,
+                                              sources_t,
+                                              receivers_t,
                                               raytracer,
                                               waveguide,
                                               min_size_vector<material, 1>> {
 public:
-    using sources_t = sources;
-    using receivers_t = receivers;
     using raytracer_t = class raytracer;
     using waveguide_t = class waveguide;
     using materials_t = class vector<material>;

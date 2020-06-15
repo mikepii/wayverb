@@ -41,19 +41,19 @@ int main() {
             sample_rate,
             speed_of_sound);
 
-    voxels_and_mesh.mesh.set_coefficients(
+    voxels_and_mesh.m.set_coefficients(
             wayverb::waveguide::to_flat_coefficients(0));
 
     const auto input_node =
-            compute_index(voxels_and_mesh.mesh.get_descriptor(), source);
+            compute_index(voxels_and_mesh.m.get_descriptor(), source);
 
     //  Set up receivers.
 
     auto output_holders =
             util::map_to_vector(begin(receivers), end(receivers), [&](auto i) {
                 const auto receiver_index{compute_index(
-                        voxels_and_mesh.mesh.get_descriptor(), i)};
-                if (!wayverb::waveguide::is_inside(voxels_and_mesh.mesh,
+                        voxels_and_mesh.m.get_descriptor(), i)};
+                if (!wayverb::waveguide::is_inside(voxels_and_mesh.m,
                                                    receiver_index)) {
                     throw std::runtime_error{"receiver is outside of mesh!"};
                 }
@@ -86,7 +86,7 @@ int main() {
 
     util::progress_bar pb;
     wayverb::waveguide::run(cc,
-                            voxels_and_mesh.mesh,
+                            voxels_and_mesh.m,
                             prep,
                             [&](auto& a, const auto& b, auto c) {
                                 for (auto& i : output_holders) {

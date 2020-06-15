@@ -82,7 +82,7 @@ int main(/*int argc, char** argv*/) {
 
         //  OPTIONAL
         if (true) {
-            voxelised.mesh.set_coefficients(
+            voxelised.m.set_coefficients(
                     wayverb::waveguide::to_flat_coefficients(absorption));
         }
 

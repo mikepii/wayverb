@@ -33,7 +33,7 @@ TEST(nan_in_waveguide, nan_in_waveguide) {
     const auto voxels_and_mesh = compute_voxels_and_mesh(
             cc, scene_data, mic, waveguide_sr, speed_of_sound);
 
-    const auto& model{voxels_and_mesh.mesh};
+    const auto& model{voxels_and_mesh.m};
 
     const auto angle = M_PI;
 

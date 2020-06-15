@@ -65,14 +65,14 @@ void test_from_paper() {
 
     {
         constexpr auto absorption = 0.005991;
-        voxels_and_mesh.mesh.set_coefficients(
+        voxels_and_mesh.m.set_coefficients(
                 wayverb::waveguide::to_flat_coefficients(absorption));
     }
 
     const auto input_node =
-            compute_index(voxels_and_mesh.mesh.get_descriptor(), source);
+            compute_index(voxels_and_mesh.m.get_descriptor(), source);
     const auto output_node =
-            compute_index(voxels_and_mesh.mesh.get_descriptor(), receiver);
+            compute_index(voxels_and_mesh.m.get_descriptor(), receiver);
 
     //  Now we get to do the interesting new bit:
     //  Set up a physically modelled source signal.
@@ -103,7 +103,7 @@ void test_from_paper() {
 
     util::progress_bar pb;
     wayverb::waveguide::run(cc,
-                            voxels_and_mesh.mesh,
+                            voxels_and_mesh.m,
                             prep,
                             [&](auto& a, const auto& b, auto c) {
                                 postprocessor(a, b, c);
@@ -171,13 +171,13 @@ void other_tests() {
             sample_rate,
             speed_of_sound);
 
-    voxels_and_mesh.mesh.set_coefficients(
+    voxels_and_mesh.m.set_coefficients(
             wayverb::waveguide::to_flat_coefficients(0.005991));
 
     const auto input_node =
-            compute_index(voxels_and_mesh.mesh.get_descriptor(), source);
+            compute_index(voxels_and_mesh.m.get_descriptor(), source);
     const auto output_node =
-            compute_index(voxels_and_mesh.mesh.get_descriptor(), receiver);
+            compute_index(voxels_and_mesh.m.get_descriptor(), receiver);
 
     //  Now we get to do the interesting new bit:
     //  Set up a physically modelled source signal.
@@ -202,7 +202,7 @@ void other_tests() {
             util::progress_bar pb;
             wayverb::waveguide::run(
                     cc,
-                    voxels_and_mesh.mesh,
+                    voxels_and_mesh.m,
                     prep,
                     [&](auto& a, const auto& b, auto c) {
                         postprocessor(a, b, c);

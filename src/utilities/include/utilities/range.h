@@ -4,6 +4,7 @@
 #include <cmath>
 #include <numeric>
 #include <stdexcept>
+#include <tuple>
 #include <type_traits>
 
 namespace util {

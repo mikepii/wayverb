@@ -170,13 +170,13 @@ TEST(dc_blocker, io) {
               audio_file::format::wav,
               audio_file::bit_depth::pcm16);
 
-        auto run{[&i](auto& filter, const auto& filter_name, auto i) {
-            filter::run_two_pass(filter, i.kernel.begin(), i.kernel.end());
-            normalize(i.kernel);
+        auto run{[&i](auto& filter_obj, const auto& filter_name, auto j) {
+            filter::run_two_pass(filter_obj, j.kernel.begin(), j.kernel.end());
+            normalize(j.kernel);
             write(util::build_string(
-                          "dc_test.output.", filter_name, ".", i.name, ".wav")
+                          "dc_test.output.", filter_name, ".", j.name, ".wav")
                           .c_str(),
-                  i.kernel,
+                  j.kernel,
                   44100,
                   audio_file::format::wav,
                   audio_file::bit_depth::pcm16);

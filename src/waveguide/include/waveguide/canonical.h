@@ -29,20 +29,20 @@ namespace detail {
 template <typename Callback>
 std::experimental::optional<band> canonical_impl(
         const core::compute_context& cc,
-        const mesh& mesh,
+        const mesh& m,
         double simulation_time,
         const glm::vec3& source,
         const glm::vec3& receiver,
         const core::environment& environment,
         const std::atomic_bool& keep_going,
         Callback&& callback) {
-    const auto sample_rate = compute_sample_rate(mesh.get_descriptor(),
+    const auto sample_rate = compute_sample_rate(m.get_descriptor(),
                                                  environment.speed_of_sound);
 
     const auto compute_mesh_index = [&](const auto& pt) {
-        const auto ret = compute_index(mesh.get_descriptor(), pt);
+        const auto ret = compute_index(m.get_descriptor(), pt);
         if (!waveguide::is_inside(
-                    mesh.get_structure().get_condensed_nodes()[ret])) {
+                    m.get_structure().get_condensed_nodes()[ret])) {
             throw std::runtime_error{
                     "Source/receiver node position appears to be outside "
                     "mesh."};
@@ -56,7 +56,7 @@ std::experimental::optional<band> canonical_impl(
         auto raw = util::aligned::vector<float>(ideal_steps, 0.0f);
         if (!raw.empty()) {
             raw.front() = rectilinear_calibration_factor(
-                    mesh.get_descriptor().spacing,
+                    m.get_descriptor().spacing,
                     environment.acoustic_impedance);
         }
         return raw;
@@ -64,14 +64,14 @@ std::experimental::optional<band> canonical_impl(
 
     auto output_accumulator =
             core::callback_accumulator<postprocessor::directional_receiver>{
-                    mesh.get_descriptor(),
+                    m.get_descriptor(),
                     sample_rate,
                     get_ambient_density(environment),
                     compute_mesh_index(receiver)};
 
     const auto steps =
             run(cc,
-                mesh,
+                m,
                 preprocessor::make_hard_source(
                         compute_mesh_index(source), begin(input), end(input)),
                 [&](auto& queue, const auto& buffer, auto step) {
@@ -109,7 +109,7 @@ std::experimental::optional<util::aligned::vector<bandpass_band>> canonical(
         const std::atomic_bool& keep_going,
         PressureCallback&& pressure_callback) {
     if (auto ret = detail::canonical_impl(cc,
-                                          voxelised.mesh,
+                                          voxelised.m,
                                           simulation_time,
                                           source,
                                           receiver,
@@ -125,11 +125,11 @@ std::experimental::optional<util::aligned::vector<bandpass_band>> canonical(
 
 ////////////////////////////////////////////////////////////////////////////////
 
-inline auto set_flat_coefficients_for_band(voxels_and_mesh& voxels_and_mesh,
+inline auto set_flat_coefficients_for_band(voxels_and_mesh& voxels_and_m,
                                            size_t band) {
-    voxels_and_mesh.mesh.set_coefficients(util::map_to_vector(
-            begin(voxels_and_mesh.voxels.get_scene_data().get_surfaces()),
-            end(voxels_and_mesh.voxels.get_scene_data().get_surfaces()),
+    voxels_and_m.m.set_coefficients(util::map_to_vector(
+            begin(voxels_and_m.voxels.get_scene_data().get_surfaces()),
+            end(voxels_and_m.voxels.get_scene_data().get_surfaces()),
             [&](const auto& surface) {
                 return to_flat_coefficients(surface.absorption.s[band]);
             }));
@@ -157,7 +157,7 @@ std::experimental::optional<util::aligned::vector<bandpass_band>> canonical(
         set_flat_coefficients_for_band(voxelised, band);
 
         if (auto rendered_band = detail::canonical_impl(cc,
-                                                        voxelised.mesh,
+                                                        voxelised.m,
                                                         simulation_time,
                                                         source,
                                                         receiver,

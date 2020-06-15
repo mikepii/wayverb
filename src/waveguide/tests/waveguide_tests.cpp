@@ -57,17 +57,17 @@ TEST(run_waveguide, run_waveguide) {
             geo::get_scene_data(box, make_surface<simulation_bands>(0.01, 0));
 
     constexpr auto speed_of_sound = 340.0;
-    auto voxels_and_mesh = compute_voxels_and_mesh(
+    auto voxels_and_m = compute_voxels_and_mesh(
             cc, scene_data, source, samplerate, speed_of_sound);
 
-    voxels_and_mesh.mesh.set_coefficients(to_flat_coefficients(0.01));
+    voxels_and_m.m.set_coefficients(to_flat_coefficients(0.01));
 
     //  get a waveguide
 
     const auto source_index =
-            compute_index(voxels_and_mesh.mesh.get_descriptor(), source);
+            compute_index(voxels_and_m.m.get_descriptor(), source);
 
-    if (!is_inside(voxels_and_mesh.mesh, source_index)) {
+    if (!is_inside(voxels_and_m.m, source_index)) {
         throw std::runtime_error("Source is outside of mesh.");
     }
 
@@ -82,8 +82,8 @@ TEST(run_waveguide, run_waveguide) {
     auto output_holders =
             util::map_to_vector(begin(receivers), end(receivers), [&](auto i) {
                 const auto receiver_index =
-                        compute_index(voxels_and_mesh.mesh.get_descriptor(), i);
-                if (!is_inside(voxels_and_mesh.mesh, receiver_index)) {
+                        compute_index(voxels_and_m.m.get_descriptor(), i);
+                if (!is_inside(voxels_and_m.m, receiver_index)) {
                     throw std::runtime_error("Receiver is outside of mesh.");
                 }
                 return callback_accumulator<postprocessor::node>{
@@ -93,7 +93,7 @@ TEST(run_waveguide, run_waveguide) {
     util::progress_bar pb;
     auto callback_counter = 0;
     run(cc,
-        voxels_and_mesh.mesh,
+        voxels_and_m.m,
         [&](auto& queue, auto& buffer, auto step) {
             return prep(queue, buffer, step);
         },

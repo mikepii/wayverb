@@ -58,7 +58,7 @@ bool operator!=(const receiver& a, const receiver& b);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-using receivers = min_size_vector<receiver, 1>;
+using receivers_t = min_size_vector<receiver, 1>;
 
 }  // namespace model
 }  // namespace combined

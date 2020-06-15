@@ -171,7 +171,7 @@ void complete_engine::do_run(core::compute_context compute_context,
 
                 //  Send new node position notification.
                 waveguide_node_positions_changed_(
-                        eng.get_voxels_and_mesh().mesh.get_descriptor());
+                        eng.get_voxels_and_mesh().m.get_descriptor());
 
                 //  Register callbacks.
                 if (!engine_state_changed_.empty()) {

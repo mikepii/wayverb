@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <memory>
 #include <mutex>
 #include <unordered_map>
 
@@ -76,8 +77,8 @@ public:
     class scoped_connection final {
     public:
         scoped_connection() = default;
-        explicit scoped_connection(connection connection)
-                : connection{std::move(connection)} {}
+        explicit scoped_connection(connection c)
+                : conn{std::move(c)} {}
 
         scoped_connection(const scoped_connection&) = delete;
         scoped_connection(scoped_connection&& other) noexcept = default;
@@ -86,9 +87,9 @@ public:
         scoped_connection& operator=(scoped_connection&& other) noexcept =
                 default;
 
-        ~scoped_connection() noexcept { connection.disconnect(); }
+        ~scoped_connection() noexcept { conn.disconnect(); }
 
-        connection connection;
+        connection conn;
     };
 
     auto connect(callback_type callback) {

@@ -27,7 +27,7 @@ private:
 
 /// Uses the number of 'inside' nodes and the mesh spacing to estimate the
 /// total volume of the room.
-double estimate_volume(const mesh& mesh);
+double estimate_volume(const mesh& m);
 
 bool is_inside(const mesh& m, size_t node_index);
 
@@ -43,7 +43,7 @@ mesh compute_mesh(
 struct voxels_and_mesh final {
     core::voxelised_scene_data<cl_float3, core::surface<core::simulation_bands>>
             voxels;
-    mesh mesh;
+    mesh m;
 };
 
 /// this one should be prefered - will set up a voxelised scene with the correct

@@ -101,8 +101,8 @@ public:
     auto operator-> () const { return item_.operator->(); }
     auto& operator*() const { return item_.operator*(); }
 
-    void block() { connection_.connection.block(); }
-    void unblock() { connection_.connection.unblock(); }
+    void block() { connection_.conn.block(); }
+    void unblock() { connection_.conn.unblock(); }
 
 private:
     std::shared_ptr<item_t> item_;

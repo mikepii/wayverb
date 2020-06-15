@@ -66,7 +66,7 @@ int main(int /*argc*/, char** /*argv*/) {
         auto voxels_and_mesh = wayverb::waveguide::compute_voxels_and_mesh(
                 cc, scene, source, sample_rate, environment.speed_of_sound);
 
-        voxels_and_mesh.mesh.set_coefficients(
+        voxels_and_mesh.m.set_coefficients(
                 wayverb::waveguide::to_flat_coefficients(absorption));
 
         const auto predicted_rt60 =
@@ -80,9 +80,9 @@ int main(int /*argc*/, char** /*argv*/) {
         input.front() = 1;
 
         const auto input_node =
-                compute_index(voxels_and_mesh.mesh.get_descriptor(), source);
+                compute_index(voxels_and_mesh.m.get_descriptor(), source);
         const auto output_node =
-                compute_index(voxels_and_mesh.mesh.get_descriptor(), receiver);
+                compute_index(voxels_and_mesh.m.get_descriptor(), receiver);
 
         auto prep = wayverb::waveguide::preprocessor::make_hard_source(
                 input_node, begin(input), end(input));
@@ -92,7 +92,7 @@ int main(int /*argc*/, char** /*argv*/) {
 
         util::progress_bar pb;
         wayverb::waveguide::run(cc,
-                                voxels_and_mesh.mesh,
+                                voxels_and_mesh.m,
                                 prep,
                                 [&](auto& a, const auto& b, auto c) {
                                     post(a, b, c);
