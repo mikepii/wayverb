@@ -1,0 +1,300 @@
+diff --git a/include/modern_gl_utils/checking.h b/include/modern_gl_utils/checking.h
+index 5b1007e..dbfa2a3 100644
+--- a/include/modern_gl_utils/checking.h
++++ b/include/modern_gl_utils/checking.h
+@@ -2,7 +2,14 @@
+ 
+ #include "exceptions.h"
+ 
++#ifdef __linux__
++#include <GL/glew.h>
++#include <GL/gl.h>
++#include <GL/glut.h>
++#else
+ #include <OpenGL/gl3.h>
++#endif
++
+ #include <string>
+ #include <vector>
+ 
+diff --git a/include/modern_gl_utils/exceptions.h b/include/modern_gl_utils/exceptions.h
+index cbca618..9bd4978 100644
+--- a/include/modern_gl_utils/exceptions.h
++++ b/include/modern_gl_utils/exceptions.h
+@@ -1,6 +1,13 @@
+ #pragma once
+ 
++#ifdef __linux__
++#include <GL/glew.h>
++#include <GL/gl.h>
++#include <GL/glut.h>
++#else
+ #include <OpenGL/gl3.h>
++#endif
++
+ #include <stdexcept>
+ 
+ namespace mglu {
+diff --git a/include/modern_gl_utils/fbo.h b/include/modern_gl_utils/fbo.h
+index c6cfa9e..35bd132 100644
+--- a/include/modern_gl_utils/fbo.h
++++ b/include/modern_gl_utils/fbo.h
+@@ -1,6 +1,12 @@
+ #pragma once
+ 
++#ifdef __linux__
++#include <GL/glew.h>
++#include <GL/gl.h>
++#include <GL/glut.h>
++#else
+ #include <OpenGL/gl3.h>
++#endif
+ 
+ #include "bindable.h"
+ #include "render_buffer.h"
+diff --git a/include/modern_gl_utils/generic_shader.h b/include/modern_gl_utils/generic_shader.h
+index 341fc8b..35762b4 100644
+--- a/include/modern_gl_utils/generic_shader.h
++++ b/include/modern_gl_utils/generic_shader.h
+@@ -11,11 +11,11 @@ public:
+     generic_shader();
+ 
+     auto get_attrib_location_v_position() const {
+-        return program.get_attrib_location("v_position");
++        return program_.get_attrib_location("v_position");
+     }
+ 
+     auto get_attrib_location_v_color() const {
+-        return program.get_attrib_location("v_color");
++        return program_.get_attrib_location("v_color");
+     }
+ 
+     void set_model_matrix(const glm::mat4 &mat) const;
+@@ -23,14 +23,14 @@ public:
+     void set_projection_matrix(const glm::mat4 &mat) const;
+ 
+     auto get_scoped() const {
+-        return program.get_scoped();
++        return program_.get_scoped();
+     }
+ 
+ private:
+     static const char *vertex_shader;
+     static const char *fragment_shader;
+ 
+-    program program;
++    program program_;
+ };
+ 
+ }  // namespace mglu
+diff --git a/include/modern_gl_utils/geometry_helpers.h b/include/modern_gl_utils/geometry_helpers.h
+index 1d7864b..87c71c9 100644
+--- a/include/modern_gl_utils/geometry_helpers.h
++++ b/include/modern_gl_utils/geometry_helpers.h
+@@ -1,7 +1,14 @@
+ #pragma once
+ 
+ #include "glm/glm.hpp"
++
++#ifdef __linux__
++#include <GL/glew.h>
++#include <GL/gl.h>
++#include <GL/glut.h>
++#else
+ #include <OpenGL/gl3.h>
++#endif
+ 
+ #include <vector>
+ #include <numeric>
+diff --git a/include/modern_gl_utils/quad_shader.h b/include/modern_gl_utils/quad_shader.h
+index 26b35b4..99fefde 100644
+--- a/include/modern_gl_utils/quad_shader.h
++++ b/include/modern_gl_utils/quad_shader.h
+@@ -12,7 +12,7 @@ private:
+     static const char* vertex_shader;
+     static const char* fragment_shader;
+ 
+-    program program;
++    program program_;
+ };
+ 
+ }  // namespace mglu
+diff --git a/include/modern_gl_utils/render_buffer.h b/include/modern_gl_utils/render_buffer.h
+index c3ba484..8f1597b 100644
+--- a/include/modern_gl_utils/render_buffer.h
++++ b/include/modern_gl_utils/render_buffer.h
+@@ -3,7 +3,14 @@
+ #include "bindable.h"
+ 
+ #include "glm/glm.hpp"
++
++#ifdef __linux__
++#include <GL/glew.h>
++#include <GL/gl.h>
++#include <GL/glut.h>
++#else
+ #include <OpenGL/gl3.h>
++#endif
+ 
+ namespace mglu {
+ 
+diff --git a/include/modern_gl_utils/screen_quad.h b/include/modern_gl_utils/screen_quad.h
+index 713f466..302fac1 100644
+--- a/include/modern_gl_utils/screen_quad.h
++++ b/include/modern_gl_utils/screen_quad.h
+@@ -17,7 +17,7 @@ public:
+     void draw() const;
+ 
+ private:
+-    vao vao;
++    vao vao_;
+     static_vbo vertex_bo;
+ };
+ 
+diff --git a/include/modern_gl_utils/shader.h b/include/modern_gl_utils/shader.h
+index b79c938..770291c 100644
+--- a/include/modern_gl_utils/shader.h
++++ b/include/modern_gl_utils/shader.h
+@@ -2,7 +2,13 @@
+ 
+ #include "bindable.h"
+ 
++#ifdef __linux__
++#include <GL/glew.h>
++#include <GL/gl.h>
++#include <GL/glut.h>
++#else
+ #include <OpenGL/gl3.h>
++#endif
+ 
+ #include <stdexcept>
+ #include <string>
+diff --git a/include/modern_gl_utils/text_shader.h b/include/modern_gl_utils/text_shader.h
+index d395425..28a2e8d 100644
+--- a/include/modern_gl_utils/text_shader.h
++++ b/include/modern_gl_utils/text_shader.h
+@@ -16,7 +16,7 @@ private:
+     static const char* vertex_shader;
+     static const char* fragment_shader;
+ 
+-    program program;
++    program program_;
+ };
+ 
+ }  // namespace mglu
+diff --git a/include/modern_gl_utils/vao.h b/include/modern_gl_utils/vao.h
+index e721890..a513698 100644
+--- a/include/modern_gl_utils/vao.h
++++ b/include/modern_gl_utils/vao.h
+@@ -4,7 +4,13 @@
+ #include "buffer_object.h"
+ #include "exceptions.h"
+ 
++#ifdef __linux__
++#include <GL/glew.h>
++#include <GL/gl.h>
++#include <GL/glut.h>
++#else
+ #include <OpenGL/gl3.h>
++#endif
+ 
+ namespace mglu {
+ 
+@@ -22,14 +28,14 @@ private:
+ };
+ 
+ template <GLuint type, GLuint mode>
+-inline void enable_and_bind_buffer(const vao& vao,
++inline void enable_and_bind_buffer(const vao& v,
+                                    const buffer_object<type, mode>& buffer,
+                                    GLuint pos,
+                                    GLint size,
+                                    GLenum t) {
+-    vao.enable_vertex_attrib_array(pos);
++    v.enable_vertex_attrib_array(pos);
+     buffer.bind();
+-    vao.vertex_attrib_pointer(pos, size, t);
++    v.vertex_attrib_pointer(pos, size, t);
+ }
+ 
+ }  // namespace mglu
+diff --git a/src/generic_shader.cpp b/src/generic_shader.cpp
+index fcdd369..7b901a3 100644
+--- a/src/generic_shader.cpp
++++ b/src/generic_shader.cpp
+@@ -5,19 +5,19 @@
+ namespace mglu {
+ 
+ generic_shader::generic_shader()
+-        : program(program::from_sources(vertex_shader, fragment_shader)) {
++        : program_(program::from_sources(vertex_shader, fragment_shader)) {
+ }
+ 
+ void generic_shader::set_model_matrix(const glm::mat4 &mat) const {
+-    program.set("v_model", mat);
++    program_.set("v_model", mat);
+ }
+ 
+ void generic_shader::set_view_matrix(const glm::mat4 &mat) const {
+-    program.set("v_view", mat);
++    program_.set("v_view", mat);
+ }
+ 
+ void generic_shader::set_projection_matrix(const glm::mat4 &mat) const {
+-    program.set("v_projection", mat);
++    program_.set("v_projection", mat);
+ }
+ 
+ const char *generic_shader::vertex_shader(R"(
+diff --git a/src/quad_shader.cpp b/src/quad_shader.cpp
+index 1b2f462..71be97f 100644
+--- a/src/quad_shader.cpp
++++ b/src/quad_shader.cpp
+@@ -3,7 +3,7 @@
+ namespace mglu {
+ 
+ quad_shader::quad_shader()
+-        : program(program::from_sources(vertex_shader, fragment_shader)) {
++        : program_(program::from_sources(vertex_shader, fragment_shader)) {
+ }
+ 
+ const char* quad_shader::vertex_shader(R"(
+diff --git a/src/screen_quad.cpp b/src/screen_quad.cpp
+index db878da..3bfa102 100644
+--- a/src/screen_quad.cpp
++++ b/src/screen_quad.cpp
+@@ -12,13 +12,13 @@ screen_quad::screen_quad(const program& shader) {
+                                           {1, -1, 0},
+                                           {1, 1, 0}});
+ 
+-    auto s_vao = vao.get_scoped();
++    auto s_vao = vao_.get_scoped();
+     enable_and_bind_buffer(
+-        vao, vertex_bo, shader.get_attrib_location("v_position"), 3, GL_FLOAT);
++        vao_, vertex_bo, shader.get_attrib_location("v_position"), 3, GL_FLOAT);
+ }
+ 
+ void screen_quad::draw() const {
+-    auto s_vao = vao.get_scoped();
++    auto s_vao = vao_.get_scoped();
+     glDrawArrays(GL_TRIANGLES, 0, 6);
+ }
+ 
+diff --git a/src/text_shader.cpp b/src/text_shader.cpp
+index 3247062..99efa0d 100644
+--- a/src/text_shader.cpp
++++ b/src/text_shader.cpp
+@@ -3,11 +3,11 @@
+ namespace mglu {
+ 
+ text_shader::text_shader()
+-        : program(program::from_sources(vertex_shader, fragment_shader)) {
++        : program_(program::from_sources(vertex_shader, fragment_shader)) {
+ }
+ 
+ void text_shader::set_tex(GLint i) const {
+-    program.set("f_tex", i);
++    program_.set("f_tex", i);
+ }
+ 
+ const char* text_shader::vertex_shader(R"(

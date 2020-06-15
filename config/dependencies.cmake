@@ -28,6 +28,11 @@ set(CUSTOM_MAKE_COMMAND
     BUILD_COMMAND make ${ENV_SETTINGS} 
 )
 
+# Threads ######################################################################
+
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 # glm ##########################################################################
 
 ExternalProject_Add(
@@ -41,6 +46,7 @@ ExternalProject_Add(
 ExternalProject_Add(
     assimp_external
     DOWNLOAD_COMMAND ${GIT_EXECUTABLE} clone --depth 1 --branch v3.3.1 https://github.com/assimp/assimp.git assimp_external
+    PATCH_COMMAND ${GIT_EXECUTABLE} apply ${CMAKE_SOURCE_DIR}/config/fix_assimp_external.patch
     CMAKE_ARGS ${GLOBAL_DEPENDENCY_CMAKE_FLAGS} -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DASSIMP_BUILD_TESTS=OFF -DASSIMP_BUILD_STATIC_LIB=ON -DBUILD_SHARED_LIBS=OFF -DASSIMP_BUILD_ZLIB=ON -DCMAKE_CXX_VISIBILITY_PRESET=hidden -DCMAKE_VISIBILITY_INLINES_HIDDEN=ON
 )
 
@@ -56,12 +62,13 @@ set_property(TARGET zlibstatic PROPERTY IMPORTED_LOCATION ${DEPENDENCY_INSTALL_P
 
 ExternalProject_Add(
     fftwf_external
-    URL http://fftw.org/fftw-3.3.5.tar.gz
+    URL http://fftw.org/fftw-3.3.8.tar.gz
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --enable-float --enable-shared=no
     ${CUSTOM_MAKE_COMMAND}
 )
 
 add_library(fftwf UNKNOWN IMPORTED)
+target_link_libraries(fftwf INTERFACE Threads::Threads)
 add_dependencies(fftwf fftwf_external) 
 set_property(TARGET fftwf PROPERTY IMPORTED_LOCATION ${DEPENDENCY_INSTALL_PREFIX}/lib/libfftw3f.a)
 
@@ -75,6 +82,7 @@ ExternalProject_Add(
 )
 
 add_library(sndfile UNKNOWN IMPORTED)
+target_link_libraries(sndfile INTERFACE Threads::Threads)
 add_dependencies(sndfile sndfile_external) 
 set_property(TARGET sndfile PROPERTY IMPORTED_LOCATION ${DEPENDENCY_INSTALL_PREFIX}/lib/libsndfile.a)
 
@@ -86,7 +94,7 @@ set_property(TARGET sndfile PROPERTY IMPORTED_LOCATION ${DEPENDENCY_INSTALL_PREF
 ExternalProject_Add(
     samplerate_external
     DOWNLOAD_COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/erikd/libsamplerate.git samplerate_external
-    PATCH_COMMAND ${GIT_EXECUTABLE} apply ${CMAKE_SOURCE_DIR}/config/fix_carbon.patch
+    # PATCH_COMMAND ${GIT_EXECUTABLE} apply ${CMAKE_SOURCE_DIR}/config/fix_carbon.patch
     CONFIGURE_COMMAND <SOURCE_DIR>/autogen.sh && <SOURCE_DIR>/configure --prefix=<INSTALL_DIR> --disable-dependency-tracking --enable-shared=no
     ${CUSTOM_MAKE_COMMAND}
 )
@@ -104,6 +112,7 @@ ExternalProject_Add(
 )
 
 add_library(gtest UNKNOWN IMPORTED)
+target_link_libraries(gtest INTERFACE Threads::Threads)
 add_dependencies(gtest gtest_external) 
 set_property(TARGET gtest PROPERTY IMPORTED_LOCATION ${DEPENDENCY_INSTALL_PREFIX}/lib/libgtest.a)
 
@@ -119,12 +128,13 @@ ExternalProject_Add(
 
 ExternalProject_Add(
     fftw_external
-    URL http://fftw.org/fftw-3.3.5.tar.gz
+    URL http://fftw.org/fftw-3.3.8.tar.gz
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
     ${CUSTOM_MAKE_COMMAND}
 )
 
 add_library(fftw UNKNOWN IMPORTED)
+target_link_libraries(fftw INTERFACE Threads::Threads)
 add_dependencies(fftw fftw_external)
 set_property(TARGET fftw PROPERTY IMPORTED_LOCATION ${DEPENDENCY_INSTALL_PREFIX}/lib/libfftw3.a)
 
@@ -140,13 +150,14 @@ ExternalProject_Add(
 )
 
 add_dependencies(itpp_external fftw_external)
-
 add_library(itpp UNKNOWN IMPORTED)
 add_dependencies(itpp itpp_external)
 set_property(TARGET itpp PROPERTY IMPORTED_LOCATION ${DEPENDENCY_INSTALL_PREFIX}/lib/libitpp_static.a)
 
 find_package(BLAS REQUIRED)
 find_package(LAPACK REQUIRED)
+find_package(OpenMP REQUIRED)
+target_link_libraries(itpp INTERFACE OpenMP::OpenMP_CXX)
 set(ITPP_LIBRARIES itpp fftw ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
 
 # opencl #######################################################################
@@ -168,6 +179,7 @@ find_package(OpenCL REQUIRED)
 ExternalProject_Add(
     modern_gl_utils_external
     DOWNLOAD_COMMAND ${GIT_EXECUTABLE} clone --depth 1 https://github.com/reuk/modern_gl_utils.git modern_gl_utils_external
+    PATCH_COMMAND ${GIT_EXECUTABLE} apply ${CMAKE_SOURCE_DIR}/config/fix_modern_gl_utils.patch
     CMAKE_ARGS ${GLOBAL_DEPENDENCY_CMAKE_FLAGS} -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
 )
 
